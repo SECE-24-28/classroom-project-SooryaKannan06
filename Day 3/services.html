@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Services - Mobile Recharge</title>
+    <link rel="stylesheet" href="navigation bar.css">
+    <script src="mockAPI.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .services-header {
+            text-align: center;
+            color: white;
+            padding: 30px 0;
+        }
+
+        .services-header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin: 30px 0;
+        }
+
+        .service-card {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            text-align: center;
+            transition: transform 0.3s;
+        }
+
+        .service-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .service-icon {
+            font-size: 3em;
+            margin-bottom: 20px;
+        }
+
+        .service-card h3 {
+            color: #333;
+            margin-bottom: 15px;
+        }
+
+        .service-card p {
+            color: #666;
+            margin-bottom: 20px;
+        }
+
+        .service-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 12px 25px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            text-decoration: none;
+            display: inline-block;
+            transition: transform 0.3s;
+        }
+
+        .service-btn:hover {
+            transform: translateY(-2px);
+        }
+
+        .history-section {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            margin: 30px 0;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+
+        .history-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+
+        .filter-controls {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+
+        .filter-controls select, .filter-controls input {
+            padding: 8px 12px;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+        }
+
+        .transaction-item {
+            border: 1px solid #eee;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 15px;
+            transition: all 0.3s;
+        }
+
+        .transaction-item:hover {
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .transaction-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .transaction-id {
+            font-weight: bold;
+            color: #667eea;
+        }
+
+        .transaction-status {
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.9em;
+            font-weight: bold;
+        }
+
+        .status-success {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .status-pending {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        .status-failed {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        .transaction-details {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+        }
+
+        .detail-item {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .detail-label {
+            color: #666;
+            font-weight: 500;
+        }
+
+        .detail-value {
+            color: #333;
+            font-weight: bold;
+        }
+
+        .no-history {
+            text-align: center;
+            padding: 50px;
+            color: #666;
+        }
+
+        .no-history-icon {
+            font-size: 4em;
+            margin-bottom: 20px;
+        }
+
+        @media (max-width: 768px) {
+            .services-header h1 {
+                font-size: 2em;
+            }
+            
+            .history-header {
+                flex-direction: column;
+                gap: 20px;
+            }
+            
+            .filter-controls {
+                flex-wrap: wrap;
+            }
+            
+            .transaction-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav>
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="#" onclick="toggleProfile()">Profile</a></li>
+                <li><a href="services.html">Services</a></li>
+                <li><a href="contact.html">Contact</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Profile Box -->
+    <div id="profileBox" style="position: absolute; top: 70px; right: 20px; width: 250px; background: white; border-radius: 10px; padding: 20px; box-shadow: 0 0 15px rgba(0,0,0,0.3); text-align: center; display: none; z-index: 1000;">
+        <img src="profile.png" alt="Profile" style="width: 80px; height: 80px; border-radius: 50%; border: 2px solid gray;">
+        <h3 id="profileName">User</h3>
+        <div id="loggedInActions" style="display: none;">
+            <button onclick="logout()" style="margin-top: 15px; padding: 8px 20px; border: none; background: red; color: white; border-radius: 5px; cursor: pointer;">Logout</button>
+        </div>
+        <div id="guestActions" style="display: none;">
+            <button onclick="goToLogin()" style="margin-top: 15px; padding: 8px 20px; border: none; background: #667eea; color: white; border-radius: 5px; cursor: pointer;">Login</button>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="services-header">
+            <h1>Our Services</h1>
+            <p>Comprehensive mobile recharge solutions</p>
+        </div>
+
+        <div class="services-grid">
+            <div class="service-card">
+                <div class="service-icon">📱</div>
+                <h3>Mobile Recharge</h3>
+                <p>Instant recharge for all major operators with best offers and cashback</p>
+                <a href="home.html" class="service-btn">Recharge Now</a>
+            </div>
+
+            <div class="service-card">
+                <div class="service-icon">💳</div>
+                <h3>Bill Payments</h3>
+                <p>Pay your electricity, gas, water, and other utility bills easily</p>
+                <a href="#" class="service-btn">Pay Bills</a>
+            </div>
+
+            <div class="service-card">
+                <div class="service-icon">🎯</div>
+                <h3>Data Plans</h3>
+                <p>Browse and activate the best data plans for your mobile</p>
+                <a href="#" class="service-btn">View Plans</a>
+            </div>
+
+            <div class="service-card">
+                <div class="service-icon">🎁</div>
+                <h3>Special Offers</h3>
+                <p>Get exclusive deals, cashback offers, and promotional discounts</p>
+                <a href="#" class="service-btn">View Offers</a>
+            </div>
+        </div>
+
+        <div class="history-section">
+            <div class="history-header">
+                <h2 style="margin: 0; color: #333;">Recharge History</h2>
+                <div class="filter-controls">
+                    <select id="statusFilter" onchange="filterHistory()">
+                        <option value="">All Status</option>
+                        <option value="Success">Success</option>
+                        <option value="Pending">Pending</option>
+                        <option value="Failed">Failed</option>
+                    </select>
+                    <select id="operatorFilter" onchange="filterHistory()">
+                        <option value="">All Operators</option>
+                        <option value="airtel">Airtel</option>
+                        <option value="jio">Jio</option>
+                        <option value="vi">Vi</option>
+                        <option value="bsnl">BSNL</option>
+                    </select>
+                    <button onclick="clearHistory()" style="padding: 8px 15px; background: #dc3545; color: white; border: none; border-radius: 5px; cursor: pointer;">Clear History</button>
+                </div>
+            </div>
+
+            <div id="historyContainer">
+                <!-- History items will be loaded here -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let rechargeHistory = [];
+
+        window.onload = function() {
+            // Load user profile
+            const user = localStorage.getItem("username");
+            if (user) {
+                document.getElementById("profileName").innerText = user;
+                document.getElementById("loggedInActions").style.display = "block";
+                document.getElementById("guestActions").style.display = "none";
+                // Load recharge history
+                loadHistory();
+            } else {
+                document.getElementById("profileName").innerText = "Guest";
+                document.getElementById("loggedInActions").style.display = "none";
+                document.getElementById("guestActions").style.display = "block";
+                // Show login message for history
+                displayGuestMessage();
+            }
+        };
+
+        async function loadHistory() {
+            try {
+                const userId = localStorage.getItem('userId');
+                if (userId) {
+                    const response = await mockAPI.getTransactionHistory(userId);
+                    if (response.success) {
+                        rechargeHistory = response.transactions;
+                        // Also sync with localStorage
+                        localStorage.setItem('rechargeHistory', JSON.stringify(rechargeHistory));
+                    }
+                } else {
+                    // Fallback to localStorage if no userId
+                    const storedHistory = localStorage.getItem('rechargeHistory');
+                    rechargeHistory = storedHistory ? JSON.parse(storedHistory) : [];
+                }
+            } catch (error) {
+                console.error('Failed to load history:', error.message);
+                // Fallback to localStorage
+                const storedHistory = localStorage.getItem('rechargeHistory');
+                rechargeHistory = storedHistory ? JSON.parse(storedHistory) : [];
+            }
+            displayHistory(rechargeHistory);
+        }
+
+        function displayHistory(history) {
+            const container = document.getElementById('historyContainer');
+            
+            if (history.length === 0) {
+                container.innerHTML = `
+                    <div class="no-history">
+                        <div class="no-history-icon">📋</div>
+                        <h3>No Recharge History</h3>
+                        <p>You haven't made any recharges yet. Start your first recharge now!</p>
+                        <a href="index.html" class="service-btn">Recharge Now</a>
+                    </div>
+                `;
+                return;
+            }
+
+            container.innerHTML = history.map(transaction => `
+                <div class="transaction-item">
+                    <div class="transaction-header">
+                        <div class="transaction-id">${transaction.transactionId}</div>
+                        <div class="transaction-status status-${transaction.status.toLowerCase()}">
+                            ${transaction.status}
+                        </div>
+                    </div>
+                    <div class="transaction-details">
+                        <div class="detail-item">
+                            <span class="detail-label">Mobile:</span>
+                            <span class="detail-value">${transaction.mobile}</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Operator:</span>
+                            <span class="detail-value">${transaction.operator.toUpperCase()}</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Amount:</span>
+                            <span class="detail-value">₹${transaction.amount}</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Date:</span>
+                            <span class="detail-value">${new Date(transaction.timestamp).toLocaleDateString()}</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Payment:</span>
+                            <span class="detail-value">${formatPaymentMethod(transaction.paymentMethod)}</span>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function filterHistory() {
+            const statusFilter = document.getElementById('statusFilter').value;
+            const operatorFilter = document.getElementById('operatorFilter').value;
+
+            let filteredHistory = rechargeHistory;
+
+            if (statusFilter) {
+                filteredHistory = filteredHistory.filter(t => t.status === statusFilter);
+            }
+
+            if (operatorFilter) {
+                filteredHistory = filteredHistory.filter(t => t.operator === operatorFilter);
+            }
+
+            displayHistory(filteredHistory);
+        }
+
+        function clearHistory() {
+            if (confirm('Are you sure you want to clear all recharge history? This action cannot be undone.')) {
+                localStorage.removeItem('rechargeHistory');
+                rechargeHistory = [];
+                displayHistory(rechargeHistory);
+            }
+        }
+
+        function formatPaymentMethod(method) {
+            switch(method) {
+                case 'card': return 'Card';
+                case 'upi': return 'UPI';
+                case 'wallet': return 'Wallet';
+                default: return method;
+            }
+        }
+
+        // Profile functions
+        function toggleProfile() {
+            const box = document.getElementById("profileBox");
+            box.style.display = (box.style.display === "block") ? "none" : "block";
+        }
+
+        function logout() {
+            localStorage.removeItem("username");
+            localStorage.removeItem("userId");
+            localStorage.removeItem("authToken");
+            alert("Logged out!");
+            window.location.href = "index.html";
+        }
+
+        function goToLogin() {
+            window.location.href = "login page.html";
+        }
+
+        function displayGuestMessage() {
+            const container = document.getElementById('historyContainer');
+            container.innerHTML = `
+                <div class="no-history">
+                    <div class="no-history-icon">🔒</div>
+                    <h3>Login Required</h3>
+                    <p>Please login to view your recharge history and access all features.</p>
+                    <a href="login page.html" class="service-btn">Login Now</a>
+                </div>
+            `;
+        }
+
+        // Close profile popup when clicking outside
+        document.addEventListener('click', function(event) {
+            const box = document.getElementById("profileBox");
+            const profileBtn = event.target.closest("a[href='#']");
+            if (!box.contains(event.target) && !profileBtn) {
+                box.style.display = "none";
+            }
+        });
+    </script>
+</body>
+</html>

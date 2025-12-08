@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mock API Test</title>
+    <script src="mockAPI.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .test-section {
+            background: white;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        button {
+            background: #007bff;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        button:hover {
+            background: #0056b3;
+        }
+        .result {
+            background: #f8f9fa;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 5px;
+            border-left: 4px solid #007bff;
+        }
+        .error {
+            border-left-color: #dc3545;
+            background: #f8d7da;
+        }
+        .success {
+            border-left-color: #28a745;
+            background: #d4edda;
+        }
+        input, select {
+            padding: 8px;
+            margin: 5px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Mock API Testing Dashboard</h1>
+    <p>Test all the mock API endpoints for the mobile recharge application</p>
+
+    <div class="test-section">
+        <h3>1. User Registration API</h3>
+        <input type="text" id="regName" placeholder="Name" value="John Doe">
+        <input type="email" id="regEmail" placeholder="Email" value="john@example.com">
+        <input type="tel" id="regMobile" placeholder="Mobile" value="9876543210">
+        <input type="password" id="regPassword" placeholder="Password" value="password123">
+        <button onclick="testRegister()">Test Register</button>
+        <div id="regResult" class="result" style="display:none;"></div>
+    </div>
+
+    <div class="test-section">
+        <h3>2. User Login API</h3>
+        <input type="text" id="loginUser" placeholder="Username" value="John Doe">
+        <input type="tel" id="loginMobile" placeholder="Mobile" value="9876543210">
+        <input type="password" id="loginPassword" placeholder="Password" value="password123">
+        <button onclick="testLogin()">Test Login</button>
+        <div id="loginResult" class="result" style="display:none;"></div>
+    </div>
+
+    <div class="test-section">
+        <h3>3. Operator Detection API</h3>
+        <input type="tel" id="detectMobile" placeholder="Mobile Number" value="9876543210">
+        <button onclick="testOperatorDetection()">Detect Operator</button>
+        <div id="detectResult" class="result" style="display:none;"></div>
+    </div>
+
+    <div class="test-section">
+        <h3>4. Recharge Processing API</h3>
+        <input type="tel" id="rechargeMobile" placeholder="Mobile" value="9876543210">
+        <select id="rechargeOperator">
+            <option value="airtel">Airtel</option>
+            <option value="jio">Jio</option>
+            <option value="vi">Vi</option>
+            <option value="bsnl">BSNL</option>
+        </select>
+        <input type="number" id="rechargeAmount" placeholder="Amount" value="199">
+        <button onclick="testRecharge()">Test Recharge</button>
+        <div id="rechargeResult" class="result" style="display:none;"></div>
+    </div>
+
+    <div class="test-section">
+        <h3>5. Transaction History API</h3>
+        <input type="text" id="historyUserId" placeholder="User ID" value="1">
+        <button onclick="testHistory()">Get History</button>
+        <div id="historyResult" class="result" style="display:none;"></div>
+    </div>
+
+    <div class="test-section">
+        <h3>6. Offers API</h3>
+        <button onclick="testOffers()">Get Offers</button>
+        <div id="offersResult" class="result" style="display:none;"></div>
+    </div>
+
+    <script>
+        async function testRegister() {
+            const resultDiv = document.getElementById('regResult');
+            resultDiv.style.display = 'block';
+            resultDiv.innerHTML = 'Processing...';
+            
+            try {
+                const response = await mockAPI.registerUser({
+                    name: document.getElementById('regName').value,
+                    email: document.getElementById('regEmail').value,
+                    mobile: document.getElementById('regMobile').value,
+                    password: document.getElementById('regPassword').value
+                });
+                
+                resultDiv.className = 'result success';
+                resultDiv.innerHTML = `<strong>Success:</strong><br><pre>${JSON.stringify(response, null, 2)}</pre>`;
+            } catch (error) {
+                resultDiv.className = 'result error';
+                resultDiv.innerHTML = `<strong>Error:</strong> ${error.message}`;
+            }
+        }
+
+        async function testLogin() {
+            const resultDiv = document.getElementById('loginResult');
+            resultDiv.style.display = 'block';
+            resultDiv.innerHTML = 'Processing...';
+            
+            try {
+                const response = await mockAPI.loginUser({
+                    username: document.getElementById('loginUser').value,
+                    mobile: document.getElementById('loginMobile').value,
+                    password: document.getElementById('loginPassword').value
+                });
+                
+                resultDiv.className = 'result success';
+                resultDiv.innerHTML = `<strong>Success:</strong><br><pre>${JSON.stringify(response, null, 2)}</pre>`;
+            } catch (error) {
+                resultDiv.className = 'result error';
+                resultDiv.innerHTML = `<strong>Error:</strong> ${error.message}`;
+            }
+        }
+
+        async function testOperatorDetection() {
+            const resultDiv = document.getElementById('detectResult');
+            resultDiv.style.display = 'block';
+            resultDiv.innerHTML = 'Processing...';
+            
+            try {
+                const response = await mockAPI.getMobileOperator(document.getElementById('detectMobile').value);
+                
+                resultDiv.className = 'result success';
+                resultDiv.innerHTML = `<strong>Success:</strong><br><pre>${JSON.stringify(response, null, 2)}</pre>`;
+            } catch (error) {
+                resultDiv.className = 'result error';
+                resultDiv.innerHTML = `<strong>Error:</strong> ${error.message}`;
+            }
+        }
+
+        async function testRecharge() {
+            const resultDiv = document.getElementById('rechargeResult');
+            resultDiv.style.display = 'block';
+            resultDiv.innerHTML = 'Processing...';
+            
+            try {
+                const response = await mockAPI.processRecharge({
+                    mobile: document.getElementById('rechargeMobile').value,
+                    operator: document.getElementById('rechargeOperator').value,
+                    amount: document.getElementById('rechargeAmount').value,
+                    userId: '1',
+                    paymentMethod: 'card'
+                });
+                
+                resultDiv.className = 'result success';
+                resultDiv.innerHTML = `<strong>Success:</strong><br><pre>${JSON.stringify(response, null, 2)}</pre>`;
+            } catch (error) {
+                resultDiv.className = 'result error';
+                resultDiv.innerHTML = `<strong>Error:</strong> ${error.message}`;
+            }
+        }
+
+        async function testHistory() {
+            const resultDiv = document.getElementById('historyResult');
+            resultDiv.style.display = 'block';
+            resultDiv.innerHTML = 'Processing...';
+            
+            try {
+                const response = await mockAPI.getTransactionHistory(document.getElementById('historyUserId').value);
+                
+                resultDiv.className = 'result success';
+                resultDiv.innerHTML = `<strong>Success:</strong><br><pre>${JSON.stringify(response, null, 2)}</pre>`;
+            } catch (error) {
+                resultDiv.className = 'result error';
+                resultDiv.innerHTML = `<strong>Error:</strong> ${error.message}`;
+            }
+        }
+
+        async function testOffers() {
+            const resultDiv = document.getElementById('offersResult');
+            resultDiv.style.display = 'block';
+            resultDiv.innerHTML = 'Processing...';
+            
+            try {
+                const response = await mockAPI.getOffers();
+                
+                resultDiv.className = 'result success';
+                resultDiv.innerHTML = `<strong>Success:</strong><br><pre>${JSON.stringify(response, null, 2)}</pre>`;
+            } catch (error) {
+                resultDiv.className = 'result error';
+                resultDiv.innerHTML = `<strong>Error:</strong> ${error.message}`;
+            }
+        }
+    </script>
+</body>
+</html>

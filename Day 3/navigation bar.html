@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Navbar</title>
+    <link rel="stylesheet" href="navigation bar.css" />
+
+    <style>
+        /* Popup box styling */
+        #profileBox {
+            position: absolute;
+            top: 70px;
+            right: 20px;
+            width: 250px;
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 0 15px rgba(0,0,0,0.3);
+            text-align: center;
+            display: none; /* hidden initially */
+            z-index: 1000;
+        }
+
+        #profileBox img {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            border: 2px solid gray;
+        }
+
+        #profileBox h3 {
+            margin-top: 10px;
+            font-size: 20px;
+        }
+
+        #profileBox button {
+            margin-top: 15px;
+            padding: 8px 20px;
+            border: none;
+            background: red;
+            color: white;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        #profileBox button:hover {
+            background: darkred;
+        }
+    </style>
+</head>
+
+<body>
+
+    <header>
+        <nav>
+            <ul>
+                <li><a href="home.html">Home</a></li>
+
+                <!-- Profile button triggers popup -->
+                <li><a href="#" onclick="toggleProfile()">Profile</a></li>
+
+                <li><a href="services.html">Services</a></li>
+                <li><a href="contact.html">Contact</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Floating Profile Box -->
+    <div id="profileBox">
+        <img src="profile.png" alt="Profile">
+        <h3 id="profileName">User</h3>
+        <button onclick="logout()">Logout</button>
+    </div>
+
+    <script>
+        // Load name from storage
+        const user = localStorage.getItem("username");
+        if (user) {
+            document.getElementById("profileName").innerText = user;
+        }
+
+        // Open / Close the floating profile box
+        function toggleProfile() {
+            const box = document.getElementById("profileBox");
+            box.style.display = (box.style.display === "block") ? "none" : "block";
+        }
+
+        // Logout function
+        function logout() {
+            localStorage.removeItem("username");
+            alert("Logged out!");
+            window.location.href = "login page.html";
+        }
+
+        // Close popup if clicked outside
+        document.addEventListener("click", function(event) {
+            const box = document.getElementById("profileBox");
+            const profileBtn = event.target.closest("a[href='#']");
+            if (!box.contains(event.target) && !profileBtn) {
+                box.style.display = "none";
+            }
+        });
+    </script>
+
+</body>
+</html>

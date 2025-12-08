@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html>
+    <head>
+       <style>
+    body {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        margin: 0;
+
+        /* Background image + blur */
+        background: 
+            linear-gradient(rgba(175, 151, 170, 0.6), rgba(84, 46, 77, 0.6)),
+            url("login.png");    /* ← Replace with your downloaded image name */
+        background-size: cover;
+        background-position: center;
+        backdrop-filter: blur(10px);  /* For supported browsers */
+    }
+
+    .box {
+        background: rgba(255, 255, 255, 0.8); /* Slight transparency */
+        padding: 50px 60px;
+        width: 400px;
+        border-radius: 15px;
+        box-shadow: 0 0 15px rgba(0,0,0,0.5);
+        backdrop-filter: blur(5px); /* Glass effect */
+    }
+
+    h2 {
+        text-align: center;
+        margin-top: 0px;
+        font-size: 25px;
+    }
+
+    .box input {
+        width: 100%;
+        padding: 10px;
+        margin: 10px 0 15px 0;
+        border-radius: 10px;
+    }
+
+    .box button {
+        text-align: center;
+        width: 200px;
+        display: block;
+        margin: 0 auto;
+        padding: 10px;
+        border-radius: 5px;
+        background-color: rgb(110, 201, 110);
+    }
+
+    .box button:hover {
+        background-color: rgb(195, 239, 195);
+        cursor: pointer;
+    }
+
+    .box p {
+        margin: 0;
+        padding: 20px 0 0 0;
+        font-weight: bold;
+        font-size: 18px;
+    }
+
+    a {
+        text-decoration: none;
+        color: rgb(18, 17, 17);
+    }
+</style>
+
+        <title>Login Page</title>
+    </head>
+    <body>
+        <script src="mockAPI.js"></script>
+        <form onsubmit="validateForm(); return false;">
+            <div class="box">
+                <h2>LOGIN</h2>
+                <p>Name </p>
+                <input id="username" type="text" placeholder="Enter the username" required><br></br>
+
+                <p>Mobile Number</p>
+                <input id="mobile" type="tel" placeholder="Enter the Mobile Number" required><br></br>
+
+                <p>Password</p>
+                <input id="password" type="password" placeholder="Enter the Password" required><br></br><br></br>
+
+                <button type="submit">Login</button><br></br>
+                <h5>Don't have an account? <a href="signin page.html" style="color:rgb(243, 29, 10);">SignUp </a></h5>
+            </div>
+        </form>
+    </body>
+    <script>
+       async function validateForm() {
+        const user = document.getElementById("username").value.trim();
+        const mobile = document.getElementById("mobile").value.trim();
+        const pass = document.getElementById("password").value.trim();
+
+        if (user === "") {
+            alert("Name cannot be empty");
+            return false;
+        }
+
+        if (!/^[0-9]{10}$/.test(mobile)) {
+            alert("Mobile number must be 10 digits");
+            return false;
+        }
+
+        if (pass.length < 6) {
+            alert("Password must be minimum 6 characters");
+            return false;
+        }
+
+        const submitBtn = document.querySelector('button[type="submit"]');
+        submitBtn.textContent = 'Logging in...';
+        submitBtn.disabled = true;
+
+        try {
+            const response = await mockAPI.loginUser({
+                username: user,
+                mobile: mobile,
+                password: pass
+            });
+
+            localStorage.setItem("username", response.user.name);
+            localStorage.setItem("userId", response.user.id);
+            localStorage.setItem("authToken", response.token);
+
+            alert('Login successful!');
+            // Check if there's a pending recharge
+            const pendingRecharge = localStorage.getItem('currentRecharge');
+            if (pendingRecharge) {
+                window.location.href = "payment.html";
+            } else {
+                window.location.href = "index.html";
+            }
+        } catch (error) {
+            alert('Login failed: ' + error.message);
+        } finally {
+            submitBtn.textContent = 'Login';
+            submitBtn.disabled = false;
+        }
+
+        return false;
+    }
+    </script>
+
+</html>
