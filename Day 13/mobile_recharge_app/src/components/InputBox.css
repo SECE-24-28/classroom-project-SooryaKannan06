@@ -1,0 +1,46 @@
+input[type="email"],
+input[type="text"],
+input[type="password"],
+input[type="tel"] {
+  border-radius: inherit !important;
+  padding: 14px 16px;           /* Add this if not set */
+  font-size: 16px;              /* Ensure font size matches placeholder */
+  border: 2px solid #e0e0e0;   /* Ensure consistent border */
+  box-sizing: border-box;       /* Include padding in width/height */
+  background-color: #fff;       /* Match background */
+  color: #000;                  /* Match text color */
+  width: 100%; 
+}
+
+input[type="email"]::placeholder,
+input[type="text"]::placeholder,
+input[type="password"]::placeholder,
+input[type="tel"]::placeholder {
+  font-size: 16px;
+  color: #999;
+  opacity: 1;
+  font-weight: normal;
+}
+
+/* Force disable autofill styling */
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active {
+  -webkit-background-clip: text !important;
+  -webkit-text-fill-color: #333 !important;
+  transition: background-color 5000s ease-in-out 0s !important;
+  -webkit-box-shadow: 0 0 0 50px #fafafa inset !important;
+  box-shadow: 0 0 0 50px #fafafa inset !important;
+}
+
+/* Remove autofill icon */
+input::-webkit-contacts-auto-fill-button,
+input::-webkit-credentials-auto-fill-button {
+  visibility: hidden;
+  display: none !important;
+  pointer-events: none;
+  height: 0;
+  width: 0;
+  margin: 0;
+}

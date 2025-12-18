@@ -1,0 +1,14 @@
+
+Hope you enjoy your new logo, here are the people that
+made your beautiful logo happen :)
+font name: Bodonitown
+font link: https://www.fontsquirrel.com/fonts/Bodonitown
+font author: Manfred Klein
+font author site: http://manfred-klein.ina-mar.com/
+
+
+icon designer: Icons By Alfredo
+icon designer link: /creator/AlfredoCreates/
+        
+{"bg":"#FDF7EC","icon-gradient-0":"#E56500","icon-gradient-1":"#EBC51D","font":"#342103","slogan":"#483517"}
+      
